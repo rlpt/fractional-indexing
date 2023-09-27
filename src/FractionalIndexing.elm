@@ -1,15 +1,40 @@
 module FractionalIndexing exposing (..)
 
+import Html exposing (a)
+
+
+
 -- https://observablehq.com/@dgreensp/implementing-fractional-indexing
 
 
-findCommonPrefix : String -> String -> String
-findCommonPrefix a b =
-    findCommonPrefix_ [] (String.toList a) (String.toList b)
+midpoint : String -> String -> String
+midpoint a b =
+    let
+        digitA =
+            String.toInt a |> Maybe.withDefault 0 |> toFloat
+
+        digitB =
+            String.toInt b |> Maybe.withDefault 9 |> toFloat
+    in
+    if digitB - digitA > 1 then
+        let
+            midDigit =
+                round <| 0.5 * (digitA + digitB)
+        in
+        ""
+
+    else
+        --first digits are consecutive
+        ""
 
 
-findCommonPrefix_ : List Char -> List Char -> List Char -> String
-findCommonPrefix_ prefix aa bb =
+findCommonStringPrefix : String -> String -> String
+findCommonStringPrefix a b =
+    findCommonPrefix [] (String.toList a) (String.toList b)
+
+
+findCommonPrefix : List Char -> List Char -> List Char -> String
+findCommonPrefix prefix aa bb =
     let
         a =
             List.head aa |> Maybe.withDefault '0'
@@ -25,7 +50,7 @@ findCommonPrefix_ prefix aa bb =
                     prefix_ =
                         prefix ++ [ a ]
                 in
-                findCommonPrefix_ prefix_ (List.tail aa |> Maybe.withDefault []) (List.tail bb |> Maybe.withDefault [])
+                findCommonPrefix prefix_ (List.tail aa |> Maybe.withDefault []) (List.tail bb |> Maybe.withDefault [])
 
             else
                 String.fromList prefix
@@ -54,6 +79,14 @@ parseIdx maybeIdxStr =
             Ok Blank
 
 
+zero =
+    "0"
+
+
+end =
+    "9"
+
+
 
 -- generateKeyBetween : (Maybe String) -> (Maybe String) -> Result String String
 -- generateKeyBetween a b =
@@ -65,11 +98,3 @@ parseIdx maybeIdxStr =
 -- generateNKeysBetween : (Maybe String) -> (Maybe String) -> Int -> String -> List String
 -- generateNKeysBetween a b n digits =
 --     []
-
-
-base62Digits =
-    "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-
-
-zero =
-    "0"
