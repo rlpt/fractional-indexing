@@ -1,7 +1,7 @@
 module FractionalIndexTest exposing (..)
 
 import Expect exposing (Expectation)
-import FractionalIndexing exposing (findCommonStringPrefix)
+import FractionalIndexing exposing (findCommonStringPrefix, midpoint)
 import Test exposing (..)
 
 
@@ -17,4 +17,7 @@ suite =
         , test "12345678 12345678" <|
             \_ ->
                 Expect.equal (findCommonStringPrefix "12345678" "12345678") "12345678"
+        , test "mid" <|
+            \_ ->
+                Expect.equal (midpoint "1992" "1993") "2"
         ]

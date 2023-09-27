@@ -1,4 +1,4 @@
-const fi = require("./expirement.mjs");
+const fi = require("./expirement.js");
 
 describe("experiment", () => {
     test("midpoint", () => {

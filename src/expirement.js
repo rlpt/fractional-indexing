@@ -13,6 +13,8 @@ const BASE_62_DIGITS =
  * @returns {string}
  */
 function midpoint(a, b, digits) {
+  console.log("MIDPOINT", a, b)
+
   const zero = digits[0];
   if (b != null && a >= b) {
     throw new Error(a + " >= " + b);
@@ -27,22 +29,34 @@ function midpoint(a, b, digits) {
     let n = 0;
     while ((a[n] || zero) === b[n]) {
       n++;
+      console.log("INC", n)
     }
     if (n > 0) {
       return b.slice(0, n) + midpoint(a.slice(n), b.slice(n), digits);
     }
   }
+
+  console.log("B before", b);
+
   // first digits (or lack of digit) are different
   const digitA = a ? digits.indexOf(a[0]) : 0;
   const digitB = b != null ? digits.indexOf(b[0]) : digits.length;
   if (digitB - digitA > 1) {
+    console.log("> 1", digitA, digitB, digitB - digitA > 1)
+
     const midDigit = Math.round(0.5 * (digitA + digitB));
     return digits[midDigit];
   } else {
     // first digits are consecutive
     if (b && b.length > 1) {
-      return b.slice(0, 1);
+      console.log("b && b.length > 1")
+      const out = b.slice(0, 1);
+
+      console.log("B after", out)
+
+      return out;
     } else {
+      console.log("else")
       // `b` is null or has length 1 (a single digit).
       // the first digit of `a` is the previous digit to `b`,
       // or 9 if `b` is null.

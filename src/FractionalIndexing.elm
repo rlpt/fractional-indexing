@@ -10,22 +10,46 @@ import Html exposing (a)
 midpoint : String -> String -> String
 midpoint a b =
     let
-        digitA =
-            String.toInt a |> Maybe.withDefault 0 |> toFloat
+        commonPrefix =
+            findCommonStringPrefix a b
 
-        digitB =
-            String.toInt b |> Maybe.withDefault 9 |> toFloat
+        newA =
+            String.slice (String.length commonPrefix) (String.length a) a
+
+        newB =
+            String.slice (String.length commonPrefix) (String.length b) b
     in
-    if digitB - digitA > 1 then
+    if String.length commonPrefix > 0 then
         let
-            midDigit =
-                round <| 0.5 * (digitA + digitB)
+            _ =
+                Debug.log "CP" [ commonPrefix, newA, newB ]
         in
-        ""
+        String.join ""
+            [ commonPrefix
+            , midpoint
+                newA
+                newB
+            ]
 
     else
-        --first digits are consecutive
-        ""
+        let
+            floatA =
+                String.toInt a |> Maybe.withDefault 0 |> toFloat
+
+            floatB =
+                String.toInt b |> Maybe.withDefault 9 |> toFloat
+        in
+        -- first digits (or lack of digit) are different
+        if floatB - floatA > 1 then
+            let
+                midDigit =
+                    round <| 0.5 * (floatA + floatB)
+            in
+            String.fromInt midDigit
+
+        else
+            --first digits are consecutive
+            ""
 
 
 findCommonStringPrefix : String -> String -> String
@@ -85,6 +109,10 @@ zero =
 
 end =
     "9"
+
+
+allDigits =
+    "0123456789"
 
 
 

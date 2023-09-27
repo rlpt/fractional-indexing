@@ -5,7 +5,7 @@ module.exports = {
     // Test spec file resolution pattern
     // By default it looks for .js, .jsx, .ts and .tsx files inside __tests__ folders and on any file with a .spec or .test suffix
     // testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$',
-    testMatch: ["**/?(*.)tests.?js"], 
+    testMatch: ["**/?(*.)tests.js"], 
 
 
     // Module file extensions for importing
