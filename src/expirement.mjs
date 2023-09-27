@@ -1,5 +1,5 @@
 const BASE_62_DIGITS =
-  "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+  "0123456789";
 
 // `a` may be empty string, `b` is null or non-empty string.
 // `a < b` lexicographically if `b` is non-null.
@@ -54,4 +54,9 @@ function midpoint(a, b, digits) {
   }
 }
 
-midpoint("1", null, BASE_62_DIGITS)
+// midpoint("1", null, BASE_62_DIGITS)
+
+module.exports = {
+  BASE_62_DIGITS,
+  midpoint,
+}
