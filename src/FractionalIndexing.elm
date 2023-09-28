@@ -117,6 +117,24 @@ getIntegerLength head =
         Err <| "invalid order key head: " ++ String.fromChar head
 
 
+getIntegerPart : String -> Result String String
+getIntegerPart key =
+    let
+        integerPartLength =
+            getIntegerLength (String.toList key |> List.head |> Maybe.withDefault 'a')
+    in
+    case integerPartLength of
+        Ok len ->
+            if len > String.length key then
+                Err <| "invalid order key: " ++ key
+
+            else
+                Ok <| String.slice 0 len key
+
+        Err err ->
+            Err err
+
+
 findCommonStringPrefix : String -> String -> String
 findCommonStringPrefix a b =
     findCommonPrefix [] (String.toList a) (String.toList b)

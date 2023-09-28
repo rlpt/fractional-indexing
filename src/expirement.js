@@ -21,8 +21,7 @@ function getIntegerLength(head) {
 
 function getIntegerPart(key) {
   const integerPartLength = getIntegerLength(key[0]);
-  console.log("getIntegerLength(key[0])", integerPartLength);
-
+  
   if (integerPartLength > key.length) {
     throw new Error("invalid order key: " + key);
   }
