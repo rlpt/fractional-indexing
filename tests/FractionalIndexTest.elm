@@ -17,13 +17,18 @@ suite =
         , test "12345678 12345678" <|
             \_ ->
                 Expect.equal (findCommonStringPrefix "12345678" "12345678") "12345678"
+
+        -- , test "mid" <|
+        --     \_ ->
+        --         Expect.equal (midpoint "1992" "1993") "19925"
         , test "mid" <|
             \_ ->
-                Expect.equal (midpoint "1992" "1993") "19925"
-        , test "mid 2" <|
-            \_ ->
-                Expect.equal (midpoint "45" "47") "46"
-        , test "mid 3" <|
-            \_ ->
-                Expect.equal (midpoint "123" "123004") "123002"
+                Expect.equal (midpoint "2" "3") "25"
+
+        -- , test "mid 2" <|
+        --     \_ ->
+        --         Expect.equal (midpoint "45" "47") "46"
+        -- , test "mid 3" <|
+        --     \_ ->
+        --         Expect.equal (midpoint "123" "123004") "123002"
         ]

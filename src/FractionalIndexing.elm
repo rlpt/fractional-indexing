@@ -7,6 +7,11 @@ import Html exposing (a)
 -- https://observablehq.com/@dgreensp/implementing-fractional-indexing
 
 
+generateKeyBetween : Maybe String -> Maybe String -> Result String String
+generateKeyBetween a b =
+    Ok ""
+
+
 midpoint : String -> String -> String
 midpoint a b =
     let
@@ -28,32 +33,63 @@ midpoint a b =
     else
         -- At this point strings do not have a common prefix
         let
-            floatA =
-                String.toInt a |> Maybe.withDefault 0 |> toFloat
+            indexOfDigit digit default =
+                String.indexes digit base62Digits |> List.head |> Maybe.withDefault default
 
-            floatB =
-                String.toInt b |> Maybe.withDefault 9 |> toFloat
+            digitA =
+                if String.isEmpty a then
+                    0
+
+                else
+                    indexOfDigit a 0
+
+            digitB =
+                if String.isEmpty b then
+                    String.length base62Digits
+
+                else
+                    indexOfDigit b (String.length base62Digits)
         in
-        if floatB - floatA > 1 then
+        if digitB - digitA > 1 then
             let
                 midDigit =
-                    round <| 0.5 * (floatA + floatB)
+                    round <| 0.5 * (toFloat digitA + toFloat digitB)
             in
-            String.fromInt midDigit
+            getBase62FromIndex midDigit
 
         else
         --first digits are consecutive
         if
-            String.length newB > 1
+            String.length b > 1
         then
-            String.slice 0 1 newB
+            String.slice 0 1 b
 
         else
             let
                 aTail =
-                    String.slice 1 (String.length a) newA
+                    String.slice 1 (String.length a) a
             in
-            newA ++ midpoint aTail ""
+            getBase62FromIndex digitA ++ midpoint aTail ""
+
+
+getBase62FromIndex : Int -> String
+getBase62FromIndex idx =
+    getAt idx (String.toList base62Digits) |> Maybe.map String.fromChar |> Maybe.withDefault ""
+
+
+getAt : Int -> List a -> Maybe a
+getAt index list =
+    List.foldl
+        (\item ( i, result ) ->
+            if i == index then
+                ( i + 1, Just item )
+
+            else
+                ( i + 1, result )
+        )
+        ( 0, Nothing )
+        list
+        |> Tuple.second
 
 
 findCommonStringPrefix : String -> String -> String
@@ -115,18 +151,5 @@ end =
     "9"
 
 
-allDigits =
-    "0123456789"
-
-
-
--- generateKeyBetween : (Maybe String) -> (Maybe String) -> Result String String
--- generateKeyBetween a b =
---     case (a, b) of
---         (Just a_, Just b_) ->
---             Ok ""
---         _ ->
---             Ok ""
--- generateNKeysBetween : (Maybe String) -> (Maybe String) -> Int -> String -> List String
--- generateNKeysBetween a b n digits =
---     []
+base62Digits =
+    "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"

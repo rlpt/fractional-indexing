@@ -1,3 +1,49 @@
+
+
+function getIntegerLength(head) {
+  if (head >= "a" && head <= "z") {
+    return head.charCodeAt(0) - "a".charCodeAt(0) + 2;
+  } else if (head >= "A" && head <= "Z") {
+    return "Z".charCodeAt(0) - head.charCodeAt(0) + 2;
+  } else {
+    throw new Error("invalid order key head: " + head);
+  }
+}
+
+/**
+ * @param {string} key
+ * @return {string}
+ */
+
+function getIntegerPart(key) {
+  const integerPartLength = getIntegerLength(key[0]);
+  if (integerPartLength > key.length) {
+    throw new Error("invalid order key: " + key);
+  }
+  return key.slice(0, integerPartLength);
+}
+
+/**
+ * @param {string} key
+ * @param {string} digits
+ * @return {void}
+ */
+
+function validateOrderKey(key, digits) {
+  if (key === "A" + digits[0].repeat(26)) {
+    throw new Error("invalid order key: " + key);
+  }
+  // getIntegerPart will throw if the first character is bad,
+  // or the key is too short.  we'd call it to check these things
+  // even if we didn't need the result
+  const i = getIntegerPart(key);
+  const f = key.slice(i.length);
+  if (f.slice(-1) === digits[0]) {
+    throw new Error("invalid order key: " + key);
+  }
+}
+
+
 const BASE_62_DIGITS =
   "0123456789";
 
@@ -74,4 +120,7 @@ function midpoint(a, b, digits) {
 module.exports = {
   BASE_62_DIGITS,
   midpoint,
+  getIntegerPart,
+  validateOrderKey,
+  getIntegerLength,
 }

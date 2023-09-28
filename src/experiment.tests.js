@@ -1,9 +1,9 @@
 const fi = require("./expirement.js");
 
 describe("experiment", () => {
-    test("midpoint", () => {
+    test("validate order key", () => {
         try {
-            console.log(fi.midpoint("1", "2", fi.BASE_62_DIGITS))
+            console.log(fi.validateOrderKey("1", fi.BASE_62_DIGITS))
         } catch (e) {
             console.log(e)
         }
