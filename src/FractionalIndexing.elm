@@ -92,6 +92,31 @@ getAt index list =
         |> Tuple.second
 
 
+charCodeAt : Int -> String -> Maybe Int
+charCodeAt index str =
+    String.toList str
+        |> getAt index
+        |> Maybe.map Char.toCode
+
+
+getIntegerLength : Char -> Result String Int
+getIntegerLength head =
+    if head >= 'a' && head <= 'z' then
+        Ok <|
+            Char.toCode head
+                - Char.toCode 'a'
+                + 2
+
+    else if head >= 'A' && head <= 'Z' then
+        Ok <|
+            Char.toCode 'Z'
+                - Char.toCode head
+                + 2
+
+    else
+        Err <| "invalid order key head: " ++ String.fromChar head
+
+
 findCommonStringPrefix : String -> String -> String
 findCommonStringPrefix a b =
     findCommonPrefix [] (String.toList a) (String.toList b)

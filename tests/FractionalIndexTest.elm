@@ -1,7 +1,7 @@
 module FractionalIndexTest exposing (..)
 
 import Expect exposing (Expectation)
-import FractionalIndexing exposing (findCommonStringPrefix, midpoint)
+import FractionalIndexing exposing (findCommonStringPrefix, getIntegerLength, midpoint)
 import Test exposing (..)
 
 
@@ -17,18 +17,22 @@ suite =
         , test "12345678 12345678" <|
             \_ ->
                 Expect.equal (findCommonStringPrefix "12345678" "12345678") "12345678"
-
-        -- , test "mid" <|
-        --     \_ ->
-        --         Expect.equal (midpoint "1992" "1993") "19925"
-        , test "mid" <|
+        , test "getIntegerLength a" <|
             \_ ->
-                Expect.equal (midpoint "2" "3") "25"
-
-        -- , test "mid 2" <|
-        --     \_ ->
-        --         Expect.equal (midpoint "45" "47") "46"
-        -- , test "mid 3" <|
-        --     \_ ->
-        --         Expect.equal (midpoint "123" "123004") "123002"
+                Expect.equal (getIntegerLength 'a') (Ok 2)
+        , test "getIntegerLength d" <|
+            \_ ->
+                Expect.equal (getIntegerLength 'd') (Ok 5)
+        , test "getIntegerLength z" <|
+            \_ ->
+                Expect.equal (getIntegerLength 'z') (Ok 27)
+        , test "getIntegerLength A" <|
+            \_ ->
+                Expect.equal (getIntegerLength 'A') (Ok 27)
+        , test "getIntegerLength D" <|
+            \_ ->
+                Expect.equal (getIntegerLength 'D') (Ok 24)
+        , test "getIntegerLength Z" <|
+            \_ ->
+                Expect.equal (getIntegerLength 'Z') (Ok 2)
         ]

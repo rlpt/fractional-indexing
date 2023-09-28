@@ -1,4 +1,8 @@
 
+/**
+ * @param {string} head
+ * @return {number}
+ */
 
 function getIntegerLength(head) {
   if (head >= "a" && head <= "z") {
@@ -17,6 +21,8 @@ function getIntegerLength(head) {
 
 function getIntegerPart(key) {
   const integerPartLength = getIntegerLength(key[0]);
+  console.log("getIntegerLength(key[0])", integerPartLength);
+
   if (integerPartLength > key.length) {
     throw new Error("invalid order key: " + key);
   }
@@ -37,6 +43,8 @@ function validateOrderKey(key, digits) {
   // or the key is too short.  we'd call it to check these things
   // even if we didn't need the result
   const i = getIntegerPart(key);
+
+
   const f = key.slice(i.length);
   if (f.slice(-1) === digits[0]) {
     throw new Error("invalid order key: " + key);
@@ -59,7 +67,6 @@ const BASE_62_DIGITS =
  * @returns {string}
  */
 function midpoint(a, b, digits) {
-  console.log("MIDPOINT", a, b)
 
   const zero = digits[0];
   if (b != null && a >= b) {
@@ -83,27 +90,21 @@ function midpoint(a, b, digits) {
 
   // RLPT at this point strings do not have a common prefix
 
-  console.log("B", b);
-
   // first digits (or lack of digit) are different
   const digitA = a ? digits.indexOf(a[0]) : 0;
   const digitB = b != null ? digits.indexOf(b[0]) : digits.length;
   if (digitB - digitA > 1) {
-    console.log("> 1", digitA, digitB, digitB - digitA > 1)
 
     const midDigit = Math.round(0.5 * (digitA + digitB));
     return digits[midDigit];
   } else {
     // first digits are consecutive
     if (b && b.length > 1) {
-      console.log("b && b.length > 1")
       const out = b.slice(0, 1);
 
-      console.log("B after", out)
 
       return out;
     } else {
-      console.log("else")
       // `b` is null or has length 1 (a single digit).
       // the first digit of `a` is the previous digit to `b`,
       // or 9 if `b` is null.
