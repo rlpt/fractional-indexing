@@ -20,18 +20,13 @@ midpoint a b =
             String.slice (String.length commonPrefix) (String.length b) b
     in
     if String.length commonPrefix > 0 then
-        let
-            _ =
-                Debug.log "CP" [ commonPrefix, newA, newB ]
-        in
-        String.join ""
-            [ commonPrefix
-            , midpoint
+        commonPrefix
+            ++ midpoint
                 newA
                 newB
-            ]
 
     else
+        -- At this point strings do not have a common prefix
         let
             floatA =
                 String.toInt a |> Maybe.withDefault 0 |> toFloat
@@ -39,7 +34,6 @@ midpoint a b =
             floatB =
                 String.toInt b |> Maybe.withDefault 9 |> toFloat
         in
-        -- first digits (or lack of digit) are different
         if floatB - floatA > 1 then
             let
                 midDigit =
@@ -48,8 +42,18 @@ midpoint a b =
             String.fromInt midDigit
 
         else
-            --first digits are consecutive
-            ""
+        --first digits are consecutive
+        if
+            String.length newB > 1
+        then
+            String.slice 0 1 newB
+
+        else
+            let
+                aTail =
+                    String.slice 1 (String.length a) newA
+            in
+            newA ++ midpoint aTail ""
 
 
 findCommonStringPrefix : String -> String -> String

@@ -29,14 +29,15 @@ function midpoint(a, b, digits) {
     let n = 0;
     while ((a[n] || zero) === b[n]) {
       n++;
-      console.log("INC", n)
     }
     if (n > 0) {
       return b.slice(0, n) + midpoint(a.slice(n), b.slice(n), digits);
     }
   }
 
-  console.log("B before", b);
+  // RLPT at this point strings do not have a common prefix
+
+  console.log("B", b);
 
   // first digits (or lack of digit) are different
   const digitA = a ? digits.indexOf(a[0]) : 0;
