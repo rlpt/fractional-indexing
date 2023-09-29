@@ -85,9 +85,20 @@ suite =
         -- test("a0V", "a1", "a0l");
         -- test("Zz", "a0", "ZzV");
         -- test("Zz", "a1", "a0");
-        , test "generateKeysBetween" <|
+        , test "generateKeysBetween a0 a1" <|
             \_ ->
                 Expect.equal
                     (generateKeyBetween "a0" "a1")
                     (Ok "a0V")
+        , test "generateKeysBetween a1 a2" <|
+            \_ ->
+                Expect.equal
+                    (generateKeyBetween "a1" "a2")
+                    (Ok "a1V")
+        , only <|
+            test "generateKeysBetween a0V a1" <|
+                \_ ->
+                    Expect.equal
+                        (generateKeyBetween "a0V" "a1")
+                        (Ok "a0l")
         ]
