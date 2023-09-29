@@ -196,6 +196,9 @@ incrementInteger x =
             let
                 ( carry, digits ) =
                     inc1 originalDigits
+
+                _ =
+                    Debug.log "DIGITS" ( originalDigits, digits )
             in
             if carry then
                 if head == 'Z' then
@@ -217,10 +220,17 @@ incrementInteger x =
 
                             else
                                 List.take (List.length digits - 1) digits
+
+                        _ =
+                            Debug.log "II" ( nextHeadDigit, finalDigits )
                     in
                     Just (String.fromList (nextHeadDigit :: finalDigits))
 
             else
+                let
+                    _ =
+                        Debug.log "no carry" ( head, digits )
+                in
                 Just (String.fromList (head :: digits))
 
 
@@ -230,6 +240,9 @@ inc1 digs =
         acc : Char -> ( Bool, List Char ) -> ( Bool, List Char )
         acc dig ( carry, prevDigs ) =
             let
+                _ =
+                    Debug.log "prevDigs" prevDigs
+
                 nextDigitIdx =
                     String.indexes (String.fromChar dig) base62Digits
                         |> List.head
@@ -251,7 +264,7 @@ inc1 digs =
                 in
                 ( False, incChar :: prevDigs )
     in
-    List.foldr acc ( True, digs ) digs
+    List.foldr acc ( True, [] ) digs
 
 
 getDigitAt : Int -> Char

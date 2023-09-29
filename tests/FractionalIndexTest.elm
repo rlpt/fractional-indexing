@@ -1,7 +1,7 @@
 module FractionalIndexTest exposing (..)
 
 import Expect exposing (Expectation)
-import FractionalIndexing exposing (findCommonStringPrefix, getIntegerLength, getIntegerPart, midpoint, validateOrderKey)
+import FractionalIndexing exposing (findCommonStringPrefix, getIntegerLength, getIntegerPart, incrementInteger, midpoint, validateOrderKey)
 import Test exposing (..)
 
 
@@ -62,4 +62,20 @@ suite =
                 Expect.equal
                     (validateOrderKey "a0")
                     (Ok "a0")
+
+        -- , test "incrementInteger a0" <|
+        --     \_ ->
+        --         Expect.equal
+        --             (incrementInteger "a0")
+        --             (Just "a1")
+        -- , test "incrementInteger bzz" <|
+        --     \_ ->
+        --         Expect.equal
+        --             (incrementInteger "bzz")
+        --             (Just "bz0")
+        , test "incrementInteger Zz" <|
+            \_ ->
+                Expect.equal
+                    (incrementInteger "Zz")
+                    (Just "Z0")
         ]
