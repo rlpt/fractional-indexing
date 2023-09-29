@@ -6,15 +6,15 @@ import { generateKeyBetween, generateNKeysBetween } from "./index.js";
  * @param {string} exp
  */
 function test(a, b, exp) {
-  /** @type {string} */
-  let act;
-  try {
-    act = generateKeyBetween(a, b);
-  } catch (exp) {
-    act = exp.message;
-  }
+    /** @type {string} */
+    let act;
+    try {
+        act = generateKeyBetween(a, b);
+    } catch (exp) {
+        act = exp.message;
+    }
 
-  console.assert(exp == act, `${exp} == ${act}`);
+    console.assert(exp == act, `${exp} == ${act}`);
 }
 
 test(null, null, "a0");
@@ -37,9 +37,9 @@ test("Zz", "a01", "a0");
 test(null, "a0V", "a0");
 test(null, "b999", "b99");
 test(
-  null,
-  "A00000000000000000000000000",
-  "invalid order key: A00000000000000000000000000"
+    null,
+    "A00000000000000000000000000",
+    "invalid order key: A00000000000000000000000000"
 );
 test(null, "A000000000000000000000000001", "A000000000000000000000000000V");
 test("zzzzzzzzzzzzzzzzzzzzzzzzzzy", null, "zzzzzzzzzzzzzzzzzzzzzzzzzzz");
@@ -56,27 +56,27 @@ test("a1", "a0", "a1 >= a0");
  * @param {string} exp
  */
 function testN(a, b, n, exp) {
-  const BASE_10_DIGITS = "0123456789";
+    const BASE_10_DIGITS = "0123456789";
 
-  /** @type {string} */
-  let act;
-  try {
-    act = generateNKeysBetween(a, b, n, BASE_10_DIGITS).join(" ");
-  } catch (exp) {
-    act = exp.message;
-  }
+    /** @type {string} */
+    let act;
+    try {
+        act = generateNKeysBetween(a, b, n, BASE_10_DIGITS).join(" ");
+    } catch (exp) {
+        act = exp.message;
+    }
 
-  console.assert(exp == act, `${exp} == ${act}`);
+    console.assert(exp == act, `${exp} == ${act}`);
 }
 
 testN(null, null, 5, "a0 a1 a2 a3 a4");
 testN("a4", null, 10, "a5 a6 a7 a8 a9 b00 b01 b02 b03 b04");
 testN(null, "a0", 5, "Z5 Z6 Z7 Z8 Z9");
 testN(
-  "a0",
-  "a2",
-  20,
-  "a01 a02 a03 a035 a04 a05 a06 a07 a08 a09 a1 a11 a12 a13 a14 a15 a16 a17 a18 a19"
+    "a0",
+    "a2",
+    20,
+    "a01 a02 a03 a035 a04 a05 a06 a07 a08 a09 a1 a11 a12 a13 a14 a15 a16 a17 a18 a19"
 );
 
 /**
@@ -85,18 +85,18 @@ testN(
  * @param {string} exp
  */
 function testBase95(a, b, exp) {
-  const BASE_95_DIGITS =
-    " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+    const BASE_95_DIGITS =
+        " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
 
-  /** @type {string} */
-  let act;
-  try {
-    act = generateKeyBetween(a, b, BASE_95_DIGITS);
-  } catch (exp) {
-    act = exp.message;
-  }
+    /** @type {string} */
+    let act;
+    try {
+        act = generateKeyBetween(a, b, BASE_95_DIGITS);
+    } catch (exp) {
+        act = exp.message;
+    }
 
-  console.assert(exp == act, `${exp} == ${act}`);
+    console.assert(exp == act, `${exp} == ${act}`);
 }
 
 testBase95("a00", "a01", "a00P");
@@ -106,9 +106,9 @@ testBase95("a ", null, "a!");
 testBase95(null, "a ", "Z~");
 testBase95("a0 ", "a0!", "invalid order key: a0 ");
 testBase95(
-  null,
-  "A                          0",
-  "A                          ("
+    null,
+    "A                          0",
+    "A                          ("
 );
 testBase95("a~", null, "b  ");
 testBase95("Z~", null, "a ");
@@ -116,7 +116,7 @@ testBase95("b   ", null, "invalid order key: b   ");
 testBase95("a0", "a0V", "a0;");
 testBase95("a  1", "a  2", "a  1P");
 testBase95(
-  null,
-  "A                          ",
-  "invalid order key: A                          "
+    null,
+    "A                          ",
+    "invalid order key: A                          "
 );

@@ -25,14 +25,30 @@ describe("experiment", () => {
     //     }
     // })
     
-    test("validateOrderKey", () => {
-        // expect(() => fi.validateOrderKey("A00000000000000000000000000", fi.BASE_62_DIGITS))
-        //     .toThrow( "invalid order key: A00000000000000000000000000"); 
-        
-        // expect(() => fi.validateOrderKey("a00", fi.BASE_62_DIGITS))
-        //     .toThrow( "invalid order key: a00"); 
-        
-            expect(() => fi.validateOrderKey("a0", fi.BASE_62_DIGITS))
-            .toThrow( "invalid order key: a0"); 
+    // test("validateInteger", () => {
+    //     console.log(fi.validateInteger("Zz"))   
+    // })
+
+    // test("incrementInteger", () => {
+    //     console.log(fi.incrementInteger("a0", fi.BASE_62_DIGITS))  // a1 
+    //     console.log(fi.incrementInteger("bzz", fi.BASE_62_DIGITS))  // bz0 
+    //     console.log(fi.incrementInteger("Zz", fi.BASE_62_DIGITS))  // Z0 
+    // })
+    
+    test("inc", () => {
+        console.log(fi.inc("by", fi.BASE_62_DIGITS))  // a1 
+        // console.log(fi.incrementInteger("bzz", fi.BASE_62_DIGITS))  // bz0 
+        // console.log(fi.incrementInteger("Zz", fi.BASE_62_DIGITS))  // Z0 
     })
+
+    // test("validateOrderKey", () => {
+    //     // expect(() => fi.validateOrderKey("A00000000000000000000000000", fi.BASE_62_DIGITS))
+    //     //     .toThrow( "invalid order key: A00000000000000000000000000"); 
+        
+    //     // expect(() => fi.validateOrderKey("a00", fi.BASE_62_DIGITS))
+    //     //     .toThrow( "invalid order key: a00"); 
+        
+    //         expect(() => fi.validateOrderKey("a0", fi.BASE_62_DIGITS))
+    //         .toThrow( "invalid order key: a0"); 
+    // })
 })

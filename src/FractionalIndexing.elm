@@ -163,6 +163,53 @@ validateOrderKey key =
                 Err e
 
 
+validateInteger : String -> Result String String
+validateInteger int =
+    let
+        errTxt =
+            "invalid integer part of order key: " ++ int
+
+        maybeLength =
+            getAt 0 (String.toList int)
+                |> Maybe.map getIntegerLength
+                |> Maybe.withDefault (Err errTxt)
+    in
+    case maybeLength of
+        Ok len ->
+            if len /= String.length int then
+                Err errTxt
+
+            else
+                Ok int
+
+        Err e ->
+            Err e
+
+
+incrementInteger : String -> Maybe String
+incrementInteger x =
+    case String.toList x of
+        [] ->
+            Nothing
+
+        head :: digs ->
+            let
+                _ =
+                    ""
+            in
+            Just ""
+
+
+inc1 : List Char -> ( Bool, List Char )
+inc1 digs =
+    let
+        acc : Char -> ( Bool, List Char ) -> ( Bool, List Char )
+        acc dig prev =
+            prev
+    in
+    List.foldr acc ( True, [] ) digs
+
+
 findCommonStringPrefix : String -> String -> String
 findCommonStringPrefix a b =
     findCommonPrefix [] (String.toList a) (String.toList b)
