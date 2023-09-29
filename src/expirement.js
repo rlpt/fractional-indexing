@@ -58,7 +58,11 @@ function incrementInteger(x, digits) {
         }
         const h = String.fromCharCode(head.charCodeAt(0) + 1);
         if (h > "a") {
+            console.log("BEFORE", digs)
+
             digs.push(digits[0]);
+            
+            console.log("AFTER", digs)
         } else {
             digs.pop();
         }

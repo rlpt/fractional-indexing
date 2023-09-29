@@ -29,17 +29,12 @@ describe("experiment", () => {
     //     console.log(fi.validateInteger("Zz"))   
     // })
 
+    const BASE_62_DIGITS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
     test("incrementInteger", () => {
-        console.log(fi.incrementInteger("a0", fi.BASE_62_DIGITS))  // a1 
-        console.log(fi.incrementInteger("bzz", fi.BASE_62_DIGITS))  // bz0 
-        console.log(fi.incrementInteger("Zz", fi.BASE_62_DIGITS))  // Z0 
+        console.log(fi.incrementInteger("bzz", fi.BASE_62_DIGITS)) 
     })
     
-    // test("inc", () => {
-    //     console.log(fi.inc("by", fi.BASE_62_DIGITS))  // a1 
-    //     // console.log(fi.incrementInteger("bzz", fi.BASE_62_DIGITS))  // bz0 
-    //     // console.log(fi.incrementInteger("Zz", fi.BASE_62_DIGITS))  // Z0 
-    // })
 
     // test("validateOrderKey", () => {
     //     // expect(() => fi.validateOrderKey("A00000000000000000000000000", fi.BASE_62_DIGITS))

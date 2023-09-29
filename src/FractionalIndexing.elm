@@ -197,8 +197,8 @@ incrementInteger x =
                 ( carry, digits ) =
                     inc1 originalDigits
 
-                _ =
-                    Debug.log "DIGITS" ( originalDigits, digits )
+                -- _ =
+                --     Debug.log "DIGITS" ( originalDigits, digits )
             in
             if carry then
                 if head == 'Z' then
@@ -214,15 +214,22 @@ incrementInteger x =
                         nextHeadDigit =
                             Char.toCode head + 1 |> Char.fromCode
 
+                        _ =
+                            Debug.log "DD" digits
+
                         finalDigits =
                             if nextHeadDigit > 'a' then
+                                let
+                                    _ =
+                                        Debug.log "Bigger than a" nextHeadDigit
+                                in
                                 digits ++ [ firstChar ]
 
                             else
                                 List.take (List.length digits - 1) digits
 
                         _ =
-                            Debug.log "II" ( nextHeadDigit, finalDigits )
+                            Debug.log "HEAD FINAL" ( nextHeadDigit, finalDigits )
                     in
                     Just (String.fromList (nextHeadDigit :: finalDigits))
 

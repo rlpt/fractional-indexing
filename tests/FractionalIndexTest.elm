@@ -62,20 +62,21 @@ suite =
                 Expect.equal
                     (validateOrderKey "a0")
                     (Ok "a0")
+        , test "incrementInteger a0" <|
+            \_ ->
+                Expect.equal
+                    (incrementInteger "a0")
+                    (Just "a1")
 
-        -- , test "incrementInteger a0" <|
-        --     \_ ->
-        --         Expect.equal
-        --             (incrementInteger "a0")
-        --             (Just "a1")
         -- , test "incrementInteger bzz" <|
         --     \_ ->
         --         Expect.equal
         --             (incrementInteger "bzz")
         --             (Just "bz0")
-        , test "incrementInteger Zz" <|
+        --      const BASE_62_DIGITS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        , test "incrementInteger bzz" <|
             \_ ->
                 Expect.equal
-                    (incrementInteger "Zz")
-                    (Just "Z0")
+                    (incrementInteger "bzz")
+                    (Just "c000")
         ]
