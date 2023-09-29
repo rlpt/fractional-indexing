@@ -135,6 +135,34 @@ getIntegerPart key =
             Err err
 
 
+validateOrderKey : String -> Result String String
+validateOrderKey key =
+    if key == "A" ++ String.repeat 26 zero then
+        Err <| "invalid order key: " ++ key
+
+    else
+        case getIntegerPart key of
+            Ok i ->
+                let
+                    f =
+                        String.slice (String.length i) (String.length key) key
+
+                    len =
+                        String.length f
+
+                    fEnd =
+                        String.slice (len - 1) len f
+                in
+                if fEnd == zero then
+                    Err <| "invalid order key: " ++ key
+
+                else
+                    Ok key
+
+            Err e ->
+                Err e
+
+
 findCommonStringPrefix : String -> String -> String
 findCommonStringPrefix a b =
     findCommonPrefix [] (String.toList a) (String.toList b)

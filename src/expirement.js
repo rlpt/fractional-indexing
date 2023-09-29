@@ -45,6 +45,11 @@ function validateOrderKey(key, digits) {
 
 
   const f = key.slice(i.length);
+
+  console.log("i", i)
+  console.log("f", f)
+  console.log("end",f.slice(-1))
+
   if (f.slice(-1) === digits[0]) {
     throw new Error("invalid order key: " + key);
   }
