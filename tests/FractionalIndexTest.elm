@@ -1,7 +1,7 @@
 module FractionalIndexTest exposing (..)
 
 import Expect exposing (Expectation)
-import FractionalIndexing exposing (findCommonStringPrefix, getIntegerLength, getIntegerPart, incrementInteger, midpoint, validateOrderKey)
+import FractionalIndexing exposing (findCommonStringPrefix, generateKeyBetween, getIntegerLength, getIntegerPart, incrementInteger, midpoint, validateOrderKey)
 import Test exposing (..)
 
 
@@ -79,4 +79,15 @@ suite =
                 Expect.equal
                     (incrementInteger "bzz")
                     (Just "c000")
+
+        -- test("a0", "a1", "a0V");
+        -- test("a1", "a2", "a1V");
+        -- test("a0V", "a1", "a0l");
+        -- test("Zz", "a0", "ZzV");
+        -- test("Zz", "a1", "a0");
+        , test "generateKeysBetween" <|
+            \_ ->
+                Expect.equal
+                    (generateKeyBetween "a0" "a1")
+                    (Ok "a0V")
         ]

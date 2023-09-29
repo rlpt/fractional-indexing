@@ -7,11 +7,6 @@ import Html exposing (a)
 -- https://observablehq.com/@dgreensp/implementing-fractional-indexing
 
 
-generateKeyBetween : Maybe String -> Maybe String -> Result String String
-generateKeyBetween a b =
-    Ok ""
-
-
 midpoint : String -> String -> String
 midpoint a b =
     let
@@ -184,6 +179,72 @@ validateInteger int =
 
         Err e ->
             Err e
+
+
+generateKeyBetween : String -> String -> Result String String
+generateKeyBetween a b =
+    -- b is bigger than a
+    let
+        ia : Result String String
+        ia =
+            getIntegerPart a
+
+        fa =
+            ia |> Result.map (\intPart -> String.slice (String.length intPart) (String.length a) a)
+
+        ib : Result String String
+        ib =
+            getIntegerPart b
+
+        fb =
+            ib |> Result.map (\intPart -> String.slice (String.length intPart) (String.length b) b)
+
+        r : Result String (Result String String)
+        r =
+            Result.map4
+                (\ia_ fa_ ib_ fb_ ->
+                    let
+                        _ =
+                            Debug.log "parts" [ ia_, fa_, ib_, fb_ ]
+
+                        res =
+                            if ia == ib then
+                                Ok ""
+
+                            else
+                                case incrementInteger ia_ of
+                                    Just i ->
+                                        if i < b then
+                                            Ok i
+
+                                        else
+                                            let
+                                                mid =
+                                                    midpoint fa_ ""
+                                            in
+                                            Ok (ia_ ++ mid)
+
+                                    Nothing ->
+                                        Err "Cannot increment anymore"
+                    in
+                    res
+                )
+                ia
+                fa
+                ib
+                fb
+    in
+    case r of
+        Ok final ->
+            final
+
+        Err e ->
+            Err e
+
+
+decrementInteger : String -> Maybe String
+decrementInteger x =
+    Nothing
 
 
 incrementInteger : String -> Maybe String
