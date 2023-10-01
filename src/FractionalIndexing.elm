@@ -188,7 +188,33 @@ generateKeyBetween a b =
             Ok (String.fromList [ 'a', firstChar ])
 
         else
-            Ok ""
+            let
+                ib =
+                    getIntegerPart b
+
+                fb =
+                    ib |> Result.map (\intPart -> String.slice (String.length intPart) (String.length b) b)
+
+                r =
+                    Result.map2
+                        (\ib_ fb_ ->
+                            -- TODO if (ib === "A" + digits[0].repeat(26)) {
+                            if ib_ < b then
+                                Ok ib_
+
+                            else
+                                decrementInteger ib_
+                                    |> Result.fromMaybe "cannot decrement any more"
+                        )
+                        ib
+                        fb
+            in
+            case r of
+                Ok res ->
+                    res
+
+                Err e ->
+                    Err e
 
     else
         -- b is bigger than a
@@ -217,6 +243,7 @@ generateKeyBetween a b =
 
                             res =
                                 if ia == ib then
+                                    -- TODO ?
                                     Ok ""
 
                                 else
