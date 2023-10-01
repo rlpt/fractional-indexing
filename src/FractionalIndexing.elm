@@ -183,63 +183,71 @@ validateInteger int =
 
 generateKeyBetween : String -> String -> Result String String
 generateKeyBetween a b =
-    -- b is bigger than a
-    let
-        ia : Result String String
-        ia =
-            getIntegerPart a
+    if String.isEmpty a then
+        if String.isEmpty b then
+            Ok (String.fromList [ 'a', firstChar ])
 
-        fa =
-            ia |> Result.map (\intPart -> String.slice (String.length intPart) (String.length a) a)
+        else
+            Ok ""
 
-        ib : Result String String
-        ib =
-            getIntegerPart b
+    else
+        -- b is bigger than a
+        let
+            ia : Result String String
+            ia =
+                getIntegerPart a
 
-        fb =
-            ib |> Result.map (\intPart -> String.slice (String.length intPart) (String.length b) b)
+            fa =
+                ia |> Result.map (\intPart -> String.slice (String.length intPart) (String.length a) a)
 
-        r : Result String (Result String String)
-        r =
-            Result.map4
-                (\ia_ fa_ ib_ fb_ ->
-                    let
-                        _ =
-                            Debug.log "parts" [ ia_, fa_, ib_, fb_ ]
+            ib : Result String String
+            ib =
+                getIntegerPart b
 
-                        res =
-                            if ia == ib then
-                                Ok ""
+            fb =
+                ib |> Result.map (\intPart -> String.slice (String.length intPart) (String.length b) b)
 
-                            else
-                                case incrementInteger ia_ of
-                                    Just i ->
-                                        if i < b then
-                                            Ok i
+            r : Result String (Result String String)
+            r =
+                Result.map4
+                    (\ia_ fa_ ib_ fb_ ->
+                        let
+                            _ =
+                                Debug.log "parts" [ ia_, fa_, ib_, fb_ ]
 
-                                        else
-                                            let
-                                                mid =
-                                                    midpoint fa_ ""
-                                            in
-                                            Ok (ia_ ++ mid)
+                            res =
+                                if ia == ib then
+                                    Ok ""
 
-                                    Nothing ->
-                                        Err "Cannot increment anymore"
-                    in
-                    res
-                )
-                ia
-                fa
-                ib
-                fb
-    in
-    case r of
-        Ok final ->
-            final
+                                else
+                                    case incrementInteger ia_ of
+                                        Just i ->
+                                            if i < b then
+                                                Ok i
 
-        Err e ->
-            Err e
+                                            else
+                                                let
+                                                    mid =
+                                                        midpoint fa_ ""
+                                                in
+                                                Ok (ia_ ++ mid)
+
+                                        Nothing ->
+                                            Err "Cannot increment anymore"
+                        in
+                        res
+                    )
+                    ia
+                    fa
+                    ib
+                    fb
+        in
+        case r of
+            Ok final ->
+                final
+
+            Err e ->
+                Err e
 
 
 decrementInteger : String -> Maybe String

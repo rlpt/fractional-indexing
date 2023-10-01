@@ -217,8 +217,10 @@ export function generateKeyBetween(a, b, digits = BASE_62_DIGITS) {
   if (a != null && b != null && a >= b) {
     throw new Error(a + " >= " + b);
   }
+  // START
+
   if (a == null) {
-    if (b == null) {
+    if (b == null) { 
       return "a" + digits[0];
     }
 
@@ -236,6 +238,8 @@ export function generateKeyBetween(a, b, digits = BASE_62_DIGITS) {
     }
     return res;
   }
+
+  // END
 
   if (b == null) {
     const ia = getIntegerPart(a);

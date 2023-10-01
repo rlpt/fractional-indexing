@@ -79,6 +79,12 @@ suite =
                 Expect.equal
                     (incrementInteger "bzz")
                     (Just "c000")
+        , only <|
+            test "generateKeysBetween" <|
+                \_ ->
+                    Expect.equal
+                        (generateKeyBetween "" "")
+                        (Ok "a0")
         , test "generateKeysBetween a0 a1" <|
             \_ ->
                 Expect.equal
