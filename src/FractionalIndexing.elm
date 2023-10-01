@@ -244,11 +244,73 @@ generateKeyBetween a b =
 
 decrementInteger : String -> Maybe String
 decrementInteger x =
-    Nothing
+    -- TODO validate integer?
+    case String.toList x of
+        [] ->
+            Nothing
+
+        head :: originalDigits ->
+            let
+                ( borrow, digits ) =
+                    dec originalDigits
+            in
+            if borrow then
+                if head == 'a' then
+                    Just (String.fromList [ 'Z', lastChar ])
+
+                else if head == 'A' then
+                    -- Cannot go lower
+                    Nothing
+
+                else
+                    let
+                        nextHeadDigit : Char
+                        nextHeadDigit =
+                            Char.toCode head - 1 |> Char.fromCode
+
+                        finalDigits =
+                            if nextHeadDigit < 'Z' then
+                                digits ++ [ lastChar ]
+
+                            else
+                                List.take (List.length digits - 1) digits
+                    in
+                    Just (String.fromList (nextHeadDigit :: finalDigits))
+
+            else
+                Just (String.fromList (head :: digits))
+
+
+dec : List Char -> ( Bool, List Char )
+dec digs =
+    let
+        acc : Char -> ( Bool, List Char ) -> ( Bool, List Char )
+        acc dig ( borrow, prevDigs ) =
+            let
+                prevDigitIdx =
+                    String.indexes (String.fromChar dig) base62Digits
+                        |> List.head
+                        |> Maybe.map (\idx -> idx - 1)
+                        |> Maybe.withDefault -1
+            in
+            if prevDigitIdx == -1 then
+                ( True, lastChar :: prevDigs )
+
+            else
+                let
+                    decChar =
+                        getAt prevDigitIdx (String.toList base62Digits)
+                            -- use non standard char is totem to show this has failed, but it never should
+                            |> Maybe.withDefault '-'
+                in
+                ( False, decChar :: prevDigs )
+    in
+    List.foldr acc ( True, [] ) digs
 
 
 incrementInteger : String -> Maybe String
 incrementInteger x =
+    -- TODO validate integer?
     case String.toList x of
         [] ->
             Nothing
@@ -256,7 +318,7 @@ incrementInteger x =
         head :: originalDigits ->
             let
                 ( carry, digits ) =
-                    inc1 originalDigits
+                    inc originalDigits
             in
             if carry then
                 if head == 'Z' then
@@ -285,32 +347,36 @@ incrementInteger x =
                 Just (String.fromList (head :: digits))
 
 
-inc1 : List Char -> ( Bool, List Char )
-inc1 digs =
+inc : List Char -> ( Bool, List Char )
+inc digs =
     let
         acc : Char -> ( Bool, List Char ) -> ( Bool, List Char )
         acc dig ( carry, prevDigs ) =
-            let
-                nextDigitIdx =
-                    String.indexes (String.fromChar dig) base62Digits
-                        |> List.head
-                        |> Maybe.map (\idx -> idx + 1)
-                        -- use -1 as default as it will fail on following checks
-                        |> Maybe.withDefault -1
-            in
-            if nextDigitIdx == String.length base62Digits then
-                --  nextDigitIndex is out of range, so we want to carry and continue on to next dig
-                ( True, firstChar :: prevDigs )
+            if carry then
+                let
+                    nextDigitIdx =
+                        String.indexes (String.fromChar dig) base62Digits
+                            |> List.head
+                            |> Maybe.map (\idx -> idx + 1)
+                            -- use -1 as default as it will fail on following checks
+                            |> Maybe.withDefault -1
+                in
+                if nextDigitIdx == String.length base62Digits then
+                    --  nextDigitIndex is out of range, so we want to carry and continue on to next dig
+                    ( True, firstChar :: prevDigs )
+
+                else
+                    -- nextDigitIndex is still in range, so we can inc with carry
+                    let
+                        incChar =
+                            getAt nextDigitIdx (String.toList base62Digits)
+                                -- use non standard char is totem to show this has failed, but it never should
+                                |> Maybe.withDefault '-'
+                    in
+                    ( False, incChar :: prevDigs )
 
             else
-                -- nextDigitIndex is still in range, so we can inc with carry
-                let
-                    incChar =
-                        getAt nextDigitIdx (String.toList base62Digits)
-                            -- use non standard char is totem to show this has failed, but it never should
-                            |> Maybe.withDefault '-'
-                in
-                ( False, incChar :: prevDigs )
+                ( carry, dig :: prevDigs )
     in
     List.foldr acc ( True, [] ) digs
 
@@ -376,12 +442,12 @@ firstChar =
     '0'
 
 
+lastChar =
+    'z'
+
+
 zero =
     String.fromChar firstChar
-
-
-end =
-    "9"
 
 
 base62Digits =
