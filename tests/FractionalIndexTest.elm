@@ -109,14 +109,19 @@ suite =
                 Expect.equal
                     (generateKeyBetween "Zz" "a1")
                     (Ok "a0")
-        , only <|
-            test "generateKeysBetween null Y00" <|
-                \_ ->
-                    Expect.equal
-                        (generateKeyBetween "" "Y00")
-                        (Ok "Xzzz")
-
-        -- test(null, "Y00", "Xzzz");
-        -- test(null, "a0V", "a0");
-        -- test(null, "b999", "b99");
+        , test "generateKeysBetween null Y00" <|
+            \_ ->
+                Expect.equal
+                    (generateKeyBetween "" "Y00")
+                    (Ok "Xzzz")
+        , test "generateKeysBetween null a0V" <|
+            \_ ->
+                Expect.equal
+                    (generateKeyBetween "" "a0V")
+                    (Ok "a0")
+        , test "generateKeysBetween null b999" <|
+            \_ ->
+                Expect.equal
+                    (generateKeyBetween "" "b999")
+                    (Ok "b99")
         ]
