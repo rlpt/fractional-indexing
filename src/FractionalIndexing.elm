@@ -193,7 +193,10 @@ generateKeyBetween : String -> String -> Result String String
 generateKeyBetween unvalidatedA unvalidatedB =
     case ( validateOrderKey unvalidatedA, validateOrderKey unvalidatedB ) of
         ( Ok a, Ok b ) ->
-            if String.isEmpty a then
+            if a > b then
+                Err (a ++ " >= " ++ b)
+
+            else if String.isEmpty a then
                 if String.isEmpty b then
                     Ok (String.fromList [ 'a', firstChar ])
 
@@ -237,49 +240,38 @@ generateKeyBetween unvalidatedA unvalidatedB =
 
                     fb =
                         ib |> Result.map (\intPart -> String.slice (String.length intPart) (String.length b) b)
-
-                    r : Result String (Result String String)
-                    r =
-                        Result.map4
-                            (\ia_ fa_ ib_ fb_ ->
-                                let
-                                    _ =
-                                        Debug.log "parts" [ ia_, fa_, ib_, fb_ ]
-
-                                    res =
-                                        if ia == ib then
-                                            -- TODO ?
-                                            Ok ""
-
-                                        else
-                                            case incrementInteger ia_ of
-                                                Just i ->
-                                                    if i < b then
-                                                        Ok i
-
-                                                    else
-                                                        let
-                                                            mid =
-                                                                midpoint fa_ ""
-                                                        in
-                                                        Ok (ia_ ++ mid)
-
-                                                Nothing ->
-                                                    Err "Cannot increment anymore"
-                                in
-                                res
-                            )
-                            ia
-                            fa
-                            ib
-                            fb
                 in
-                case r of
-                    Ok final ->
-                        final
+                Result.map4
+                    (\ia_ fa_ ib_ fb_ ->
+                        let
+                            res =
+                                if ia == ib then
+                                    -- TODO ?
+                                    Ok ""
 
-                    Err e ->
-                        Err e
+                                else
+                                    case incrementInteger ia_ of
+                                        Just i ->
+                                            if i < b then
+                                                Ok i
+
+                                            else
+                                                let
+                                                    mid =
+                                                        midpoint fa_ ""
+                                                in
+                                                Ok (ia_ ++ mid)
+
+                                        Nothing ->
+                                            Err "Cannot increment anymore"
+                        in
+                        res
+                    )
+                    ia
+                    fa
+                    ib
+                    fb
+                    |> Result.andThen identity
 
         _ ->
             Ok "NON VAL"
