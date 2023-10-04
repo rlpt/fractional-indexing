@@ -1,6 +1,7 @@
 module FractionalIndexing exposing (..)
 
 import Html exposing (a)
+import Html.Attributes exposing (id)
 
 
 
@@ -130,9 +131,16 @@ getIntegerPart key =
             Err err
 
 
+stringA26Zeros =
+    "A" ++ String.repeat 26 zero
+
+
 validateOrderKey : String -> Result String String
 validateOrderKey key =
-    if key == "A" ++ String.repeat 26 zero then
+    if String.isEmpty key then
+        Ok key
+
+    else if key == stringA26Zeros then
         Err <| "invalid order key: " ++ key
 
     else
@@ -182,24 +190,27 @@ validateInteger int =
 
 
 generateKeyBetween : String -> String -> Result String String
-generateKeyBetween a b =
-    if String.isEmpty a then
-        if String.isEmpty b then
-            Ok (String.fromList [ 'a', firstChar ])
+generateKeyBetween unvalidatedA unvalidatedB =
+    case ( validateOrderKey unvalidatedA, validateOrderKey unvalidatedB ) of
+        ( Ok a, Ok b ) ->
+            if String.isEmpty a then
+                if String.isEmpty b then
+                    Ok (String.fromList [ 'a', firstChar ])
 
-        else
-            let
-                ib =
-                    getIntegerPart b
+                else
+                    let
+                        ib =
+                            getIntegerPart b
 
-                fb =
-                    ib |> Result.map (\intPart -> String.slice (String.length intPart) (String.length b) b)
-
-                r =
+                        fb =
+                            ib |> Result.map (\intPart -> String.slice (String.length intPart) (String.length b) b)
+                    in
                     Result.map2
                         (\ib_ fb_ ->
-                            -- TODO if (ib === "A" + digits[0].repeat(26)) {
-                            if ib_ < b then
+                            if ib_ == stringA26Zeros then
+                                Ok <| ib_ ++ midpoint "" fb_
+
+                            else if ib_ < b then
                                 Ok ib_
 
                             else
@@ -208,73 +219,70 @@ generateKeyBetween a b =
                         )
                         ib
                         fb
-            in
-            case r of
-                Ok res ->
-                    res
+                        |> Result.andThen identity
 
-                Err e ->
-                    Err e
+            else
+                -- b is bigger than a
+                let
+                    ia : Result String String
+                    ia =
+                        getIntegerPart a
 
-    else
-        -- b is bigger than a
-        let
-            ia : Result String String
-            ia =
-                getIntegerPart a
+                    fa =
+                        ia |> Result.map (\intPart -> String.slice (String.length intPart) (String.length a) a)
 
-            fa =
-                ia |> Result.map (\intPart -> String.slice (String.length intPart) (String.length a) a)
+                    ib : Result String String
+                    ib =
+                        getIntegerPart b
 
-            ib : Result String String
-            ib =
-                getIntegerPart b
+                    fb =
+                        ib |> Result.map (\intPart -> String.slice (String.length intPart) (String.length b) b)
 
-            fb =
-                ib |> Result.map (\intPart -> String.slice (String.length intPart) (String.length b) b)
+                    r : Result String (Result String String)
+                    r =
+                        Result.map4
+                            (\ia_ fa_ ib_ fb_ ->
+                                let
+                                    _ =
+                                        Debug.log "parts" [ ia_, fa_, ib_, fb_ ]
 
-            r : Result String (Result String String)
-            r =
-                Result.map4
-                    (\ia_ fa_ ib_ fb_ ->
-                        let
-                            _ =
-                                Debug.log "parts" [ ia_, fa_, ib_, fb_ ]
+                                    res =
+                                        if ia == ib then
+                                            -- TODO ?
+                                            Ok ""
 
-                            res =
-                                if ia == ib then
-                                    -- TODO ?
-                                    Ok ""
+                                        else
+                                            case incrementInteger ia_ of
+                                                Just i ->
+                                                    if i < b then
+                                                        Ok i
 
-                                else
-                                    case incrementInteger ia_ of
-                                        Just i ->
-                                            if i < b then
-                                                Ok i
+                                                    else
+                                                        let
+                                                            mid =
+                                                                midpoint fa_ ""
+                                                        in
+                                                        Ok (ia_ ++ mid)
 
-                                            else
-                                                let
-                                                    mid =
-                                                        midpoint fa_ ""
-                                                in
-                                                Ok (ia_ ++ mid)
+                                                Nothing ->
+                                                    Err "Cannot increment anymore"
+                                in
+                                res
+                            )
+                            ia
+                            fa
+                            ib
+                            fb
+                in
+                case r of
+                    Ok final ->
+                        final
 
-                                        Nothing ->
-                                            Err "Cannot increment anymore"
-                        in
-                        res
-                    )
-                    ia
-                    fa
-                    ib
-                    fb
-        in
-        case r of
-            Ok final ->
-                final
+                    Err e ->
+                        Err e
 
-            Err e ->
-                Err e
+        _ ->
+            Ok "NON VAL"
 
 
 decrementInteger : String -> Maybe String
