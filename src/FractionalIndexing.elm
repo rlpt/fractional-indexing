@@ -245,9 +245,8 @@ generateKeyBetween unvalidatedA unvalidatedB =
                     (\ia_ fa_ ib_ fb_ ->
                         let
                             res =
-                                if ia == ib then
-                                    -- TODO ?
-                                    Ok ""
+                                if ia_ == ib_ then
+                                    Ok <| ia_ ++ midpoint fa_ fb_
 
                                 else
                                     case incrementInteger ia_ of
@@ -256,11 +255,7 @@ generateKeyBetween unvalidatedA unvalidatedB =
                                                 Ok i
 
                                             else
-                                                let
-                                                    mid =
-                                                        midpoint fa_ ""
-                                                in
-                                                Ok (ia_ ++ mid)
+                                                Ok <| ia_ ++ midpoint fa_ ""
 
                                         Nothing ->
                                             Err "Cannot increment anymore"
@@ -273,8 +268,11 @@ generateKeyBetween unvalidatedA unvalidatedB =
                     fb
                     |> Result.andThen identity
 
-        _ ->
-            Ok "NON VAL"
+        ( Err a, _ ) ->
+            Err a
+
+        ( _, Err b ) ->
+            Err b
 
 
 decrementInteger : String -> Maybe String

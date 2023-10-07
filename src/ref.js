@@ -208,6 +208,8 @@ function decrementInteger(x, digits) {
  * @return {string}
  */
 export function generateKeyBetween(a, b, digits = BASE_62_DIGITS) {
+// TODO
+
   if (a != null) {
     validateOrderKey(a, digits);
   }
@@ -217,13 +219,13 @@ export function generateKeyBetween(a, b, digits = BASE_62_DIGITS) {
   if (a != null && b != null && a >= b) {
     throw new Error(a + " >= " + b);
   }
-  // START
 
   if (a == null) {
     if (b == null) { 
       return "a" + digits[0];
     }
 
+  // START
     const ib = getIntegerPart(b);
     const fb = b.slice(ib.length);
     if (ib === "A" + digits[0].repeat(26)) {
@@ -237,9 +239,9 @@ export function generateKeyBetween(a, b, digits = BASE_62_DIGITS) {
       throw new Error("cannot decrement any more");
     }
     return res;
+  // END
   }
 
-  // END
 
   if (b == null) {
     const ia = getIntegerPart(a);
