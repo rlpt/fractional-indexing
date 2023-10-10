@@ -191,88 +191,116 @@ validateInteger int =
 
 generateKeyBetween : String -> String -> Result String String
 generateKeyBetween unvalidatedA unvalidatedB =
-    case ( validateOrderKey unvalidatedA, validateOrderKey unvalidatedB ) of
-        ( Ok a, Ok b ) ->
-            if a > b then
-                Err (a ++ " >= " ++ b)
+    if unvalidatedA /= "" && unvalidatedB /= "" && unvalidatedA >= unvalidatedB then
+        Err (unvalidatedA ++ " >= " ++ unvalidatedB)
 
-            else if String.isEmpty a then
-                if String.isEmpty b then
-                    Ok (String.fromList [ 'a', firstChar ])
+    else
+        case ( validateOrderKey unvalidatedA, validateOrderKey unvalidatedB ) of
+            ( Ok a, Ok b ) ->
+                if String.isEmpty a then
+                    if String.isEmpty b then
+                        Ok (String.fromList [ 'a', firstChar ])
+
+                    else
+                        let
+                            ib =
+                                getIntegerPart b
+
+                            fb =
+                                ib |> Result.map (\intPart -> String.slice (String.length intPart) (String.length b) b)
+                        in
+                        Result.map2
+                            (\ib_ fb_ ->
+                                if ib_ == stringA26Zeros then
+                                    Ok <| ib_ ++ midpoint "" fb_
+
+                                else if ib_ < b then
+                                    Ok ib_
+
+                                else
+                                    decrementInteger ib_
+                                        |> Result.fromMaybe "cannot decrement any more"
+                            )
+                            ib
+                            fb
+                            |> Result.andThen identity
+
+                else if String.isEmpty b then
+                    let
+                        ia =
+                            getIntegerPart a
+
+                        -- TODO make own func nonIntegerTail
+                        fa =
+                            ia |> Result.map (\intPart -> String.slice (String.length intPart) (String.length a) a)
+
+                        -- i = incrementInteger ia
+                    in
+                    Result.map2
+                        (\ia_ fa_ ->
+                            let
+                                i =
+                                    incrementInteger ia_
+                            in
+                            case i of
+                                Nothing ->
+                                    Ok <| ia_ ++ midpoint fa_ ""
+
+                                Just i_ ->
+                                    Ok i_
+                        )
+                        ia
+                        fa
+                        |> Result.andThen identity
 
                 else
                     let
+                        ia : Result String String
+                        ia =
+                            getIntegerPart a
+
+                        fa =
+                            ia |> Result.map (\intPart -> String.slice (String.length intPart) (String.length a) a)
+
+                        ib : Result String String
                         ib =
                             getIntegerPart b
 
                         fb =
                             ib |> Result.map (\intPart -> String.slice (String.length intPart) (String.length b) b)
                     in
-                    Result.map2
-                        (\ib_ fb_ ->
-                            if ib_ == stringA26Zeros then
-                                Ok <| ib_ ++ midpoint "" fb_
+                    Result.map4
+                        (\ia_ fa_ ib_ fb_ ->
+                            let
+                                res =
+                                    if ia_ == ib_ then
+                                        Ok <| ia_ ++ midpoint fa_ fb_
 
-                            else if ib_ < b then
-                                Ok ib_
+                                    else
+                                        case incrementInteger ia_ of
+                                            Just i ->
+                                                if i < b then
+                                                    Ok i
 
-                            else
-                                decrementInteger ib_
-                                    |> Result.fromMaybe "cannot decrement any more"
+                                                else
+                                                    Ok <| ia_ ++ midpoint fa_ ""
+
+                                            Nothing ->
+                                                Err "Cannot increment anymore"
+                            in
+                            res
                         )
+                        ia
+                        fa
                         ib
                         fb
                         |> Result.andThen identity
 
-            else
-                -- b is bigger than a
-                let
-                    ia : Result String String
-                    ia =
-                        getIntegerPart a
+            ( Err a, _ ) ->
+                Err a
 
-                    fa =
-                        ia |> Result.map (\intPart -> String.slice (String.length intPart) (String.length a) a)
-
-                    ib : Result String String
-                    ib =
-                        getIntegerPart b
-
-                    fb =
-                        ib |> Result.map (\intPart -> String.slice (String.length intPart) (String.length b) b)
-                in
-                Result.map4
-                    (\ia_ fa_ ib_ fb_ ->
-                        let
-                            res =
-                                if ia_ == ib_ then
-                                    Ok <| ia_ ++ midpoint fa_ fb_
-
-                                else
-                                    case incrementInteger ia_ of
-                                        Just i ->
-                                            if i < b then
-                                                Ok i
-
-                                            else
-                                                Ok <| ia_ ++ midpoint fa_ ""
-
-                                        Nothing ->
-                                            Err "Cannot increment anymore"
-                        in
-                        res
-                    )
-                    ia
-                    fa
-                    ib
-                    fb
-                    |> Result.andThen identity
-
-        ( Err a, _ ) ->
-            Err a
-
-        ( _, Err b ) ->
-            Err b
+            ( _, Err b ) ->
+                Err b
 
 
 decrementInteger : String -> Maybe String
