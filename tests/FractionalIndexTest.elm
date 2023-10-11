@@ -1,7 +1,7 @@
 module FractionalIndexTest exposing (..)
 
 import Expect exposing (Expectation)
-import FractionalIndexing exposing (findCommonStringPrefix, generateKeyBetween, getIntegerLength, getIntegerPart, incrementInteger, midpoint, validateOrderKey)
+import FractionalIndexing exposing (generateKeyBetween, generateNKeysBetween)
 import Test exposing (..)
 
 
@@ -172,21 +172,37 @@ suite =
         , testGenerateKeyBetween "a1"
             "a0"
             (Err "a1 >= a0")
+        , only <|
+            testGenerateNKeysBetween
+                "a4"
+                ""
+                10
+                (Ok "a5 a6 a7 a8 a9 aA aB aC aD aE")
         ]
+
+
+null : String -> String
+null s =
+    if String.isEmpty s then
+        "null"
+
+    else
+        s
 
 
 testGenerateKeyBetween : String -> String -> Result String String -> Test
 testGenerateKeyBetween a b expected =
-    let
-        null s =
-            if String.isEmpty s then
-                "null"
-
-            else
-                s
-    in
-    test ("generateKeysBetween " ++ null a ++ " " ++ null b) <|
+    test ("generateKeyBetween " ++ null a ++ " " ++ null b) <|
         \_ ->
             Expect.equal
                 (generateKeyBetween a b)
+                expected
+
+
+testGenerateNKeysBetween : String -> String -> Int -> Result String String -> Test
+testGenerateNKeysBetween a b n expected =
+    test ("generateNKeysBetween " ++ null a ++ " " ++ null b ++ " " ++ String.fromInt n) <|
+        \_ ->
+            Expect.equal
+                (generateNKeysBetween a b n |> Result.map (String.join " "))
                 expected

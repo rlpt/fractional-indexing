@@ -303,9 +303,59 @@ generateKeyBetween unvalidatedA unvalidatedB =
                 Err b
 
 
+generateNKeysBetween : String -> String -> Int -> Result String (List String)
+generateNKeysBetween a b n =
+    case ( a, b, n ) of
+        ( _, _, 0 ) ->
+            Ok []
+
+        ( _, _, 1 ) ->
+            generateKeyBetween a b
+                |> Result.map List.singleton
+
+        ( _, "", _ ) ->
+            let
+                -- testN("a4", null, 10, "a5 a6 a7 a8 a9 b00 b01 b02 b03 b04");
+                -- WRONG:                "a5 a6 a7 a8 a9 aA aB aC aD aE aF"
+                c : Result String String
+                c =
+                    generateKeyBetween a b
+
+                toList : Int -> List String -> String -> Result String (List String)
+                toList count list lastValue =
+                    if count == 1 then
+                        Ok list
+
+                    else
+                        let
+                            nextValue =
+                                generateKeyBetween lastValue b
+                        in
+                        case nextValue of
+                            Ok nextValue_ ->
+                                let
+                                    nextList =
+                                        list ++ [ nextValue_ ]
+                                in
+                                toList (count - 1) nextList nextValue_
+
+                            Err e ->
+                                Err e
+            in
+            case c of
+                -- TODO test
+                Ok c_ ->
+                    toList n [ c_ ] c_
+
+                Err e ->
+                    Err e
+
+        _ ->
+            Ok []
+
+
 decrementInteger : String -> Maybe String
 decrementInteger x =
-    -- TODO validate integer?
     case String.toList x of
         [] ->
             Nothing
