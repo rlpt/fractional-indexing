@@ -7,129 +7,7 @@ import Test exposing (..)
 
 suite : Test
 suite =
-    describe "findCommonPrefix"
-        -- [ test "123 123004" <|
-        --     \_ ->
-        --         Expect.equal (findCommonStringPrefix "123" "123004") "12300"
-        -- , test "12 123004" <|
-        --     \_ ->
-        --         Expect.equal (findCommonStringPrefix "12" "123004") "12"
-        -- , test "12345678 12345678" <|
-        --     \_ ->
-        --         Expect.equal (findCommonStringPrefix "12345678" "12345678") "12345678"
-        -- , test "getIntegerLength a" <|
-        --     \_ ->
-        --         Expect.equal (getIntegerLength 'a') (Ok 2)
-        -- , test "getIntegerLength d" <|
-        --     \_ ->
-        --         Expect.equal (getIntegerLength 'd') (Ok 5)
-        -- , test "getIntegerLength z" <|
-        --     \_ ->
-        --         Expect.equal (getIntegerLength 'z') (Ok 27)
-        -- , test "getIntegerLength A" <|
-        --     \_ ->
-        --         Expect.equal (getIntegerLength 'A') (Ok 27)
-        -- , test "getIntegerLength D" <|
-        --     \_ ->
-        --         Expect.equal (getIntegerLength 'D') (Ok 24)
-        -- , test "getIntegerLength Z" <|
-        --     \_ ->
-        --         Expect.equal (getIntegerLength 'Z') (Ok 2)
-        -- , test "getIntegerPart a0" <|
-        --     \_ ->
-        --         Expect.equal (getIntegerPart "a0") (Ok "a0")
-        -- , test "getIntegerPart Zz" <|
-        --     \_ ->
-        --         Expect.equal (getIntegerPart "Zz") (Ok "Zz")
-        -- , test "getIntegerPart a0V" <|
-        --     \_ ->
-        --         Expect.equal (getIntegerPart "a0V") (Ok "a0")
-        -- , test "getIntegerPart b125" <|
-        --     \_ ->
-        --         Expect.equal (getIntegerPart "b125") (Ok "b12")
-        -- , test "validateOrderKey A00000000000000000000000000" <|
-        --     \_ ->
-        --         Expect.equal
-        --             (validateOrderKey "A00000000000000000000000000")
-        --             (Err "invalid order key: A00000000000000000000000000")
-        -- , test "validateOrderKey a00" <|
-        --     \_ ->
-        --         Expect.equal
-        --             (validateOrderKey "a00")
-        --             (Err "invalid order key: a00")
-        -- , test "validateOrderKey a0" <|
-        --     \_ ->
-        --         Expect.equal
-        --             (validateOrderKey "a0")
-        --             (Ok "a0")
-        -- , test "incrementInteger a0" <|
-        --     \_ ->
-        --         Expect.equal
-        --             (incrementInteger "a0")
-        --             (Just "a1")
-        -- , test "incrementInteger bzz" <|
-        --     \_ ->
-        --         Expect.equal
-        --             (incrementInteger "bzz")
-        --             (Just "bz0")
-        --      const BASE_62_DIGITS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-        -- , test "incrementInteger bzz" <|
-        --     \_ ->
-        --         Expect.equal
-        --             (incrementInteger "bzz")
-        --             (Just "c000")
-        -- , test "generateKeysBetween" <|
-        --     \_ ->
-        --         Expect.equal
-        --             (generateKeyBetween "" "")
-        --             (Ok "a0")
-        -- , test "generateKeysBetween a0 a1" <|
-        --     \_ ->
-        --         Expect.equal
-        --             (generateKeyBetween "a0" "a1")
-        --             (Ok "a0V")
-        -- , test "generateKeysBetween a1 a2" <|
-        --     \_ ->
-        --         Expect.equal
-        --             (generateKeyBetween "a1" "a2")
-        --             (Ok "a1V")
-        -- , test "generateKeysBetween a0V a1" <|
-        --     \_ ->
-        --         Expect.equal
-        --             (generateKeyBetween "a0V" "a1")
-        --             (Ok "a0l")
-        -- , test "generateKeysBetween Zz a0" <|
-        --     \_ ->
-        --         Expect.equal
-        --             (generateKeyBetween "Zz" "a0")
-        --             (Ok "ZzV")
-        -- , test "generateKeysBetween Zz a1" <|
-        --     \_ ->
-        --         Expect.equal
-        --             (generateKeyBetween "Zz" "a1")
-        --             (Ok "a0")
-        -- , test "generateKeysBetween null Y00" <|
-        --     \_ ->
-        --         Expect.equal
-        --             (generateKeyBetween "" "Y00")
-        --             (Ok "Xzzz")
-        -- , test "generateKeysBetween null a0V" <|
-        --     \_ ->
-        --         Expect.equal
-        --             (generateKeyBetween "" "a0V")
-        --             (Ok "a0")
-        -- , test "generateKeysBetween null b999" <|
-        --     \_ ->
-        --         Expect.equal
-        --             (generateKeyBetween "" "b999")
-        --             (Ok "b99")
-        -- , testGenerateKeysBetween "a0" "a0V" (Ok "a0G")
-        -- , test "generateKeysBetween a1 a0" <|
-        --     \_ ->
-        --         Expect.equal
-        --             (generateKeyBetween "a1" "a0")
-        --             (Err "a1 >= a0")
-        -- , testGenerateKeysBetween "a0" "a0V" (Ok "a0G")
+    describe "FractionalTest"
         [ testGenerateKeyBetween "" "" (Ok "a0")
         , testGenerateKeyBetween "" "a0" (Ok "Zz")
         , testGenerateKeyBetween "" "Zz" (Ok "Zy")
@@ -187,14 +65,11 @@ suite =
             "a0"
             5
             (Ok "Zv Zw Zx Zy Zz")
-
-        -- testN(null, "a0", 5, "Z5 Z6 Z7 Z8 Z9");
-        -- , only <|
-        --     testGenerateNKeysBetween
-        --         "a0"
-        --         "a2"
-        --         20
-        --         (Ok "a01 a02 a03 a035 a04 a05 a06 a07 a08 a09 a1 a11 a12 a13 a14 a15 a16 a17 a18 a19")
+        , testGenerateNKeysBetween
+            "a0"
+            "a2"
+            20
+            (Ok "a04 a08 a0G a0K a0O a0V a0Z a0d a0l a0t a1 a14 a18 a1G a1O a1V a1Z a1d a1l a1t")
         ]
 
 

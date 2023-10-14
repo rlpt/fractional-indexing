@@ -382,10 +382,40 @@ generateNKeysBetween a b n =
 
         _ ->
             let
-                _ =
-                    ""
+                mid =
+                    floor (toFloat n / 2)
+
+                c =
+                    generateKeyBetween a b
+
+                lhs : Result String (List String)
+                lhs =
+                    c
+                        |> Result.andThen
+                            (\c_ ->
+                                generateNKeysBetween a c_ mid
+                            )
+
+                rhs : Result String (List String)
+                rhs =
+                    c
+                        |> Result.andThen
+                            (\c_ ->
+                                generateNKeysBetween c_ b (n - mid - 1)
+                            )
             in
-            Err "BLANK"
+            case ( c, lhs, rhs ) of
+                ( Ok c_, Ok lhs_, Ok rhs_ ) ->
+                    Ok (List.concat [ lhs_, [ c_ ], rhs_ ])
+
+                ( Err e, _, _ ) ->
+                    Err e
+
+                ( _, Err e, _ ) ->
+                    Err e
+
+                ( _, _, Err e ) ->
+                    Err e
 
 
 decrementInteger : String -> Maybe String

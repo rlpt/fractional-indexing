@@ -53,7 +53,13 @@ describe("experiment", () => {
 
     test("nb", () => {
         // testN("a4", null, 10, "a5 a6 a7 a8 a9 b00 b01 b02 b03 b04");
-        testN(null, "a0", 5, "Z5 Z6 Z7 Z8 Z9");
+        // testN(null, "a0", 5, "Z5 Z6 Z7 Z8 Z9");
+        testN(
+            "a0",
+            "a2",
+            20,
+            "a01 a02 a03 a035 a04 a05 a06 a07 a08 a09 a1 a11 a12 a13 a14 a15 a16 a17 a18 a19"
+        );
     })
 
     // testN(null, null, 5, "a0 a1 a2 a3 a4");
