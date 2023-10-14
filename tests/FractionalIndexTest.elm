@@ -172,12 +172,29 @@ suite =
         , testGenerateKeyBetween "a1"
             "a0"
             (Err "a1 >= a0")
-        , only <|
-            testGenerateNKeysBetween
-                "a4"
-                ""
-                10
-                (Ok "a5 a6 a7 a8 a9 aA aB aC aD aE")
+        , testGenerateNKeysBetween
+            ""
+            ""
+            5
+            (Ok "a0 a1 a2 a3 a4")
+        , testGenerateNKeysBetween
+            "a4"
+            ""
+            10
+            (Ok "a5 a6 a7 a8 a9 aA aB aC aD aE")
+        , testGenerateNKeysBetween
+            ""
+            "a0"
+            5
+            (Ok "Zv Zw Zx Zy Zz")
+
+        -- testN(null, "a0", 5, "Z5 Z6 Z7 Z8 Z9");
+        -- , only <|
+        --     testGenerateNKeysBetween
+        --         "a0"
+        --         "a2"
+        --         20
+        --         (Ok "a01 a02 a03 a035 a04 a05 a06 a07 a08 a09 a1 a11 a12 a13 a14 a15 a16 a17 a18 a19")
         ]
 
 

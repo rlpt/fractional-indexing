@@ -52,7 +52,8 @@ describe("experiment", () => {
     }
 
     test("nb", () => {
-        testN("a4", null, 10, "a5 a6 a7 a8 a9 b00 b01 b02 b03 b04");
+        // testN("a4", null, 10, "a5 a6 a7 a8 a9 b00 b01 b02 b03 b04");
+        testN(null, "a0", 5, "Z5 Z6 Z7 Z8 Z9");
     })
 
     // testN(null, null, 5, "a0 a1 a2 a3 a4");
