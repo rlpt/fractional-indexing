@@ -1,13 +1,13 @@
 module FractionalIndexTest exposing (..)
 
-import Expect exposing (Expectation)
+import Expect
 import FractionalIndexing exposing (generateKeyBetween, generateNKeysBetween)
 import Test exposing (..)
 
 
 suite : Test
 suite =
-    describe "FractionalTest"
+    describe "FractionalIndex"
         [ testGenerateKeyBetween "" "" (Ok "a0")
         , testGenerateKeyBetween "" "a0" (Ok "Zz")
         , testGenerateKeyBetween "" "Zz" (Ok "Zy")
