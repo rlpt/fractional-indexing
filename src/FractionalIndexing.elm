@@ -163,6 +163,8 @@ validateOrderKey key =
                 Err e
 
 
+{-| Generate value between two provided values
+-}
 generateKeyBetween : String -> String -> Result String String
 generateKeyBetween unvalidatedA unvalidatedB =
     if unvalidatedA /= "" && unvalidatedB /= "" && unvalidatedA >= unvalidatedB then
@@ -275,6 +277,8 @@ generateKeyBetween unvalidatedA unvalidatedB =
                 Err b
 
 
+{-| Generate N values between two provided values
+-}
 generateNKeysBetween : String -> String -> Int -> Result String (List String)
 generateNKeysBetween a b n =
     case ( a, b, n ) of
