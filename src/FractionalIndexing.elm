@@ -1,11 +1,14 @@
-module FractionalIndexing exposing (..)
+module FractionalIndexing exposing
+    ( generateKeyBetween
+    , generateNKeysBetween
+    )
 
-import Html exposing (a)
-import Html.Attributes exposing (id)
+{-| Elm port of <https://github.com/rocicorp/fractional-indexing> with only base62 support
 
+@docs generateKeyBetween
+@docs generateNKeysBetween
 
-
--- https://observablehq.com/@dgreensp/implementing-fractional-indexing
+-}
 
 
 midpoint : String -> String -> String
@@ -88,13 +91,6 @@ getAt index list =
         |> Tuple.second
 
 
-charCodeAt : Int -> String -> Maybe Int
-charCodeAt index str =
-    String.toList str
-        |> getAt index
-        |> Maybe.map Char.toCode
-
-
 getIntegerLength : Char -> Result String Int
 getIntegerLength head =
     if head >= 'a' && head <= 'z' then
@@ -131,6 +127,7 @@ getIntegerPart key =
             Err err
 
 
+stringA26Zeros : String
 stringA26Zeros =
     "A" ++ String.repeat 26 zero
 
@@ -164,29 +161,6 @@ validateOrderKey key =
 
             Err e ->
                 Err e
-
-
-validateInteger : String -> Result String String
-validateInteger int =
-    let
-        errTxt =
-            "invalid integer part of order key: " ++ int
-
-        maybeLength =
-            getAt 0 (String.toList int)
-                |> Maybe.map getIntegerLength
-                |> Maybe.withDefault (Err errTxt)
-    in
-    case maybeLength of
-        Ok len ->
-            if len /= String.length int then
-                Err errTxt
-
-            else
-                Ok int
-
-        Err e ->
-            Err e
 
 
 generateKeyBetween : String -> String -> Result String String
@@ -593,37 +567,21 @@ findCommonPrefix prefix aa bb =
             String.fromList prefix
 
 
-type Idx
-    = Blank
-    | Valid { raw : String }
-
-
-parseIdx : Maybe String -> Result String Idx
-parseIdx maybeIdxStr =
-    -- TODO check for trailing 0
-    case maybeIdxStr of
-        Just idxStr ->
-            if String.isEmpty idxStr then
-                Ok Blank
-
-            else
-                Ok (Valid { raw = idxStr })
-
-        Nothing ->
-            Ok Blank
-
-
+firstChar : Char
 firstChar =
     '0'
 
 
+lastChar : Char
 lastChar =
     'z'
 
 
+zero : String
 zero =
     String.fromChar firstChar
 
 
+base62Digits : String
 base62Digits =
     "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
